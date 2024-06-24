@@ -3,7 +3,7 @@ import 'package:idioms_and_phrases/OnBoardingPage/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
-
+// import 'firebase_options.dart';
 
 SharedPreferences? prefs = null;
 
