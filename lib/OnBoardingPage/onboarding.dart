@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
+import 'package:idioms_and_phrases/LoginPage/login.dart';
 
 import '../util/constants.dart';
 
@@ -44,7 +45,7 @@ class OnBoardingScreen extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => const OnBoardingScreen(),
+            builder: (context) => const LoginScreen(),
           ),
         );
       },

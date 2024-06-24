@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "912239429693",
+    "project_id": "idiomsandphrases-8d67e",
+    "storage_bucket": "idiomsandphrases-8d67e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912239429693:android:1af0d6ec24ce8e48870254",
+        "android_client_info": {
+          "package_name": "com.example.idioms_and_phrases"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912239429693-62qg29l940vlo7q23qjeddke97m07u3g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-oIsFJ1q7ZfUyPi7cL1OqZpqxw-WjhMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912239429693-62qg29l940vlo7q23qjeddke97m07u3g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

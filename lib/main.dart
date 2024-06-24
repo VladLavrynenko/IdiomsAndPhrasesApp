@@ -2,12 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:idioms_and_phrases/OnBoardingPage/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
+
 
 SharedPreferences? prefs = null;
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    // Handle Firebase initialization errors (e.g., log the error, show a user-friendly message)
+    print("Firebase initialization failed: $e");
+  }
+  runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

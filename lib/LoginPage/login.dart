@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -6,15 +9,33 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Center(
+      child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: WidgetStateProperty.all<Color>(Colors.blue),
+        ),
+        onPressed: () {
+          signInWithEmailPassword(
+            "lavasdasd",
+            "123123213",
+          );
+        },
+        child: Text('Login'),
+      )
+    );
+  }
+}
 
-    // FirebaseAuth.instance
-    //     .authStateChanges()
-    //     .listen((User? user) {
-    //   if (user != null) {
-    //     print(user.uid);
-    //   }
-    // });
-
-    return const Placeholder();
+Future<User?> signInWithEmailPassword(String email, String password) async {
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
+  } on FirebaseAuthException catch (e) {
+    print('Failed with error code: ${e.code}');
+    print(e.message);
+    return null;
   }
 }
