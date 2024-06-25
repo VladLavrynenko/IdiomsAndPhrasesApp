@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
 
     return const CupertinoApp(
       debugShowCheckedModeBanner: false,
-      home: OnBoardingScreen(),
+      home: SafeArea(child: OnBoardingScreen()),
     );
   }
 }

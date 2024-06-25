@@ -46,7 +46,7 @@ class OnBoardingScreen extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => const ExploreScreen()//LoginScreen(),
+            builder: (context) => const SafeArea(child: ExploreScreen())//LoginScreen(),
           ),
         );
       },
