@@ -1,0 +1,4 @@
+enum CardSizes {
+  focused,
+  unfocused
+}
