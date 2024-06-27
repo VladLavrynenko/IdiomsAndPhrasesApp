@@ -118,7 +118,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
 
 
-                            IconButtonExample(onTap: () async {
+                            SoundButton(onTap: () async {
                               _newVoiceText = i["idiom"];
                               _speak();
                             },),

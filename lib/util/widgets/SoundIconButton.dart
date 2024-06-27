@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class IconButtonExample extends StatefulWidget {
+class SoundButton extends StatefulWidget {
   final Future<void> Function() onTap;
 
-  const IconButtonExample({Key? key, required this.onTap}) : super(key: key);
+  const SoundButton({Key? key, required this.onTap}) : super(key: key);
 
   @override
-  State<IconButtonExample> createState() => _IconButtonExampleState();
+  State<SoundButton> createState() => _SoundButtonState();
 }
 
-class _IconButtonExampleState extends State<IconButtonExample> {
+class _SoundButtonState extends State<SoundButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
