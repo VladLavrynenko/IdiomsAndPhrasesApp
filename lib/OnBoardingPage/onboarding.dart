@@ -4,6 +4,7 @@ import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:idioms_and_phrases/LoginPage/login.dart';
 
 import '../ExplorePage/ExplorePage.dart';
+import '../model/ScreensModes.dart';
 import '../util/constants.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -46,7 +47,7 @@ class OnBoardingScreen extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => const SafeArea(child: ExploreScreen())//LoginScreen(),
+            builder: (context) => const SafeArea(child: ExploreScreen( screenMode: ScreensModes.OTHERS,))//LoginScreen(),
           ),
         );
       },

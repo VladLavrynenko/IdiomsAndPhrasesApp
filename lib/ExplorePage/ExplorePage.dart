@@ -1,24 +1,35 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:idioms_and_phrases/util/enums.dart';
+import 'package:idioms_and_phrases/model/ScreensModes.dart';
 import '../util/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:flutter_tts/flutter_tts.dart';
 import '../util/widgets/SoundIconButton.dart';
 
 class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({super.key});
+  final ScreensModes screenMode;
+  const ExploreScreen({super.key, required this.screenMode});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  var title = 'Top-10';
   int? focusedIndex;
   bool isIdiomFocused = false;
+  var flutterTts = FlutterTts();
+
+  String? language;
+  String? engine;
+  double volume = 0.5;
+  double pitch = 1.0;
+  double rate = 0.5;
+  bool isCurrentLanguageInstalled = false;
+
+  var _newVoiceText = "Lesson One";
 
   void _changeFocus(int index, bool focusOnIdiom) {
     setState(() {
@@ -34,14 +45,34 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   List<dynamic> jsonData = [];
 
+  Future<void> _speak() async {
+    await flutterTts.setVolume(volume);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(pitch);
+
+    if (_newVoiceText.isNotEmpty) {
+      await flutterTts.speak(_newVoiceText);
+    }
+  }
+
+
   @override
   void initState() {
+    var mode = widget.screenMode;
+
     super.initState();
     downloadJSONFile(top10URL).then((data) {
       setState(() {
-        jsonData = data["idioms"];
+        title = mode.title;
+
+        if(mode == ScreensModes.TOP10){
+          jsonData = data["idioms"];
+        } else {
+          jsonData = data["others"];
+        }
       });
     });
+
   }
 
   @override
@@ -85,7 +116,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
 
 
-                            IconButtonExample(),
+                            IconButtonExample(onTap: () async {
+                              _newVoiceText = i["idiom"];
+                              _speak();
+                            },),
 
                             TextButton(
                               onPressed: () {

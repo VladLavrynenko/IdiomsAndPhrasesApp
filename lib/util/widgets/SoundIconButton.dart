@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class IconButtonExample extends StatefulWidget {
-  const IconButtonExample({super.key, this.onTap});
+  final Future<void> Function() onTap;
 
-  final Function()? onTap;
+  const IconButtonExample({Key? key, required this.onTap}) : super(key: key);
+
   @override
   State<IconButtonExample> createState() => _IconButtonExampleState();
 }
 
 class _IconButtonExampleState extends State<IconButtonExample> {
-  get onTap => null;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,8 +18,13 @@ class _IconButtonExampleState extends State<IconButtonExample> {
         IconButton(
           icon: const Icon(Icons.volume_up),
           tooltip: 'Increase volume by 10',
-          onPressed: onTap,
-      ),
+          onPressed: () async {
+            await widget.onTap();
+            if (widget.onTap != null) {
+              widget.onTap!();
+            }
+          },
+        ),
         // Text('Play'),
       ],
     );
