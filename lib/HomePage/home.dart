@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:idioms_and_phrases/util/widgets/CardHome.dart';
 
-import '../util/widgets/SoundIconButton.dart';
 
 class HomeScreen  extends StatefulWidget {
   const HomeScreen ({super.key});
@@ -15,11 +15,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final numbers = <int>[1, 2, 6, 7];
 
-
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Idioms and Phrases'),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/parrot.gif',
+              width: 25,
+              height: 25,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -45,19 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: <Widget>[
+
         /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: Text(
-                'Home page',
-                style: theme.textTheme.titleLarge,
-              ),
-            ),
-          ),
-        ),
+        CardsHome(title: "title", onTap: () async {} ),
 
 
     /// Notifications page
