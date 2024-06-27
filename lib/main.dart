@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:idioms_and_phrases/OnBoardingPage/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'dart:async';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
     // } else
     //   firstScreen = OnBoardingScreen();
 
-    return const CupertinoApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(child: OnBoardingScreen()),
     );

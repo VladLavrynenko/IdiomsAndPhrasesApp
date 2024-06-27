@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:idioms_and_phrases/model/ScreensModes.dart';
 import '../util/constants.dart';
 import 'package:http/http.dart' as http;
@@ -82,7 +83,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Text(
-          "Here is Top-10",
+          title,
           style: TextStyle(color: Colors.blueAccent, backgroundColor: Colors.amber, fontSize: 48),
         ),
         Expanded(
@@ -106,6 +107,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           children: [
                             TextButton(
                               onPressed: () {
+                                copyToClipBoard( context, i["idiom"]);
                                 _changeFocus(index, true);
                               },
                               child: AnimatedDefaultTextStyle(
@@ -123,6 +125,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
                             TextButton(
                               onPressed: () {
+                                copyToClipBoard( context, i["explanation"]);
                                 _changeFocus(index, false);
                               },
                               child: AnimatedDefaultTextStyle(
@@ -165,3 +168,20 @@ Future<Map<String, dynamic>> downloadJSONFile(String downloadURL) async {
     return {};
   }
 }
+
+void copyToClipBoard(BuildContext context, String textToCopy)  async {
+  if (textToCopy.isNotEmpty) {
+    try {
+      await Clipboard.setData(ClipboardData(text: textToCopy));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Copied to Clipboard!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to copy to clipboard.')),
+      );
+    }
+  }
+}
+
+
