@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:idioms_and_phrases/LoginPage/login.dart';
 
-import '../ExplorePage/ExplorePage.dart';
+import '../HomePage/home.dart';
 import '../model/ScreensModes.dart';
 import '../util/constants.dart';
 
@@ -47,7 +47,7 @@ class OnBoardingScreen extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => const SafeArea(child: ExploreScreen( screenMode: ScreensModes.OTHERS,))//LoginScreen(),
+            builder: (context) => const SafeArea(child: HomeScreen()),
           ),
         );
       },
@@ -65,110 +65,116 @@ class OnBoardingScreen extends StatelessWidget {
       ],
       speed: 1.8,
       pageBodies: [
-        Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 480,
-              ),
-              Text(
-                'Discover New Idioms Right Here!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kDarkBlueColor,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
+        SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 480,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text("Welcome to your go-to resource for discovering "
-                  "and understanding English idioms.",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  'Discover New Idioms Right Here!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kDarkBlueColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text("Welcome to your go-to resource for discovering "
+                    "and understanding English idioms.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 480,
-              ),
-              Text(
-                'Uncover the Depth of Idioms and Phrases',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kDarkBlueColor,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
+        SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 480,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Our app is dedicated to unraveling the meanings and origins of idioms, '
-                    'making them accessible and easy to understand.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  'Uncover the Depth of Idioms and Phrases',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kDarkBlueColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Our app is dedicated to unraveling the meanings and origins of idioms, '
+                      'making them accessible and easy to understand.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 480,
-              ),
-              Text(
-                'Start now!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kDarkBlueColor,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
+        SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 480,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Begin your adventure in mastering idioms and phrases today.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  'Start now!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kDarkBlueColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Begin your adventure in mastering idioms and phrases today.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

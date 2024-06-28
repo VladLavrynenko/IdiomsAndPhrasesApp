@@ -8,42 +8,52 @@ import 'package:firebase_core/firebase_core.dart';
 import 'HomePage/home.dart';
 // import 'firebase_options.dart';
 
-SharedPreferences? prefs = null;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await Firebase.initializeApp();
   } catch (e) {
-    // Handle Firebase initialization errors (e.g., log the error, show a user-friendly message)
     print("Firebase initialization failed: $e");
   }
-  runApp(MyApp());
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(prefs: prefs));
 }
 
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+
+  const MyApp({Key? key, required this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // getPrefs();
-    // var firstStart = prefs?.getBool('first_start');
-    // print(firstStart.toString());
+    return FutureBuilder<bool>(
+      future: _getFirstStartPreference(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          bool firstStart = snapshot.data ?? true;
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: SafeArea(
+              child: firstStart ? OnBoardingScreen() : OnBoardingScreen(), //HomeScreen(),
+            ),
+          );
+        }
+      },
+    );
+  }
 
-    // var firstScreen = null;
-    // if (firstStart != null && firstStart) {
-    //   firstScreen = HomeScreen();
-    // } else
-    //   firstScreen = OnBoardingScreen();
-
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(child: HomeScreen(), //OnBoardingScreen()),
-    ));
+  Future<bool> _getFirstStartPreference() async {
+    bool? firstStart = prefs.getBool('first_start');
+    if (firstStart == null) {
+      await prefs.setBool('first_start', false);
+      firstStart = false;
+      return true;
+    }
+    return firstStart;
   }
 }
-
-// Future<void> getPrefs() async {
-//   prefs = await SharedPreferences.getInstance();
-// }

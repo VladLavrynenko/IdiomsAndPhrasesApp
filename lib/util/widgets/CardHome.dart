@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:idioms_and_phrases/ExplorePage/ExplorePage.dart';
+import 'package:idioms_and_phrases/model/ScreensModes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CardsHome extends StatefulWidget {
   final Future<void> Function() onTap;
@@ -20,20 +23,22 @@ class _CardsHomeState extends State<CardsHome> {
         children: [
       
           Padding(padding: EdgeInsets.only(left: 16.0, top: 16.0), child: Text("Explore")),
-          cardExplore(),
+          cardExplore(context),
 
           Padding(padding: EdgeInsets.only(left: 16.0, top: 16.0), child: Text("Learn" ),),
           cardLearn(),
 
           Padding(padding: EdgeInsets.only(left: 16.0, top: 16.0), child: Text("Quiz" ),),
-          cardQuiz()
+          cardQuiz(),
+
+          cardSite()
         ],
       ),
     );
   }
 }
 
-Widget cardExplore() {
+Widget cardExplore(BuildContext context) {
   return Card(
     color: Colors.white,
     margin: EdgeInsets.all(8),
@@ -41,43 +46,40 @@ Widget cardExplore() {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
+          onTap: (){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                builder: (context) => SafeArea(child: const ExploreScreen(screenMode: ScreensModes.TOP10)), //Main()
+            ));
+          },
           leading: Icon(Icons.explore),
-          // Uncomment and use your SoundButton here
-          // leading: SoundButton(
-          //   title: 'Sound',
-          //   onTap: () async {
-          //     _newVoiceText = i["idiom"];
-          //     _speak();
-          //   },
-          // ),
           title: Text('Explore Top-10'),
           subtitle: Text('This is a notification'),
         ),
         Divider(),
         ListTile(
           leading: Icon(Icons.explore),
-          // Uncomment and use your SoundButton here
-          // leading: SoundButton(
-          //   title: 'Sound',
-          //   onTap: () async {
-          //     _newVoiceText = i["idiom"];
-          //     _speak();
-          //   },
-          // ),
+          onTap: (){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SafeArea(child: const ExploreScreen(screenMode: ScreensModes.OTHERS)), //Main()
+                ));
+          },
           title: Text('Explore Others'),
           subtitle: Text('This is another notification'),
         ),
         Divider(),
         ListTile(
           leading: Icon(Icons.explore),
-          // Uncomment and use your SoundButton here
-          // leading: SoundButton(
-          //   title: 'Sound',
-          //   onTap: () async {
-          //     _newVoiceText = i["idiom"];
-          //     _speak();
-          //   },
-          // ),
+          onTap: (){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SafeArea(child: const ExploreScreen(screenMode: ScreensModes.ALL)), //Main()
+                ));
+          },
           title: Text('Explore All'),
           subtitle: Text('This is yet another notification'),
         ),
@@ -191,4 +193,27 @@ Widget cardQuiz() {
       ],
     ),
   );
+}
+
+Widget cardSite() {
+  return Card(
+    color: Colors.white,
+    margin: EdgeInsets.all(8),
+    child: ListTile(
+      leading: Icon(Icons.web),
+      onTap: () {
+        _launchUrl();
+      },
+      title: Text('Visit our website'),
+      subtitle: FittedBox(child: Text('https://cerulean-gaufre-10fe12.netlify.app/#', maxLines: 1,)),
+    ),
+  );
+}
+
+
+Future<void> _launchUrl() async {
+  final _url = Uri.parse("https://cerulean-gaufre-10fe12.netlify.app/#");
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
+  }
 }
