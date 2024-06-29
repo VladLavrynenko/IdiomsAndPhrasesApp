@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:idioms_and_phrases/util/widgets/CardHome.dart';
 
+import '../util/widgets/MenuHome.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -34,7 +36,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   automaticallyImplyLeading: false,
                   title: Text('Favourites'),
                 )
-              : null, // Hide the AppBar if no specific condition is met
+              : currentPageIndex == 2
+                  ? AppBar(
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                        systemNavigationBarColor:
+                            Colors.purple, // Navigation bar
+                        statusBarColor: Colors.purple, // Status bar
+                      ),
+                      automaticallyImplyLeading: false,
+                      title: Text('Menu'),
+                    )
+                  : null, // Hide the AppBar if no specific condition is met
 
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -109,46 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         /// Menu/Settings page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-            );
-          },
-        ),
+        MenuHome(),
       ][currentPageIndex],
     );
   }
