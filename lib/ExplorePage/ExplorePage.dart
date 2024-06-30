@@ -68,7 +68,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         if (mode == ScreensModes.TOP10) {
           jsonData = data["idioms"];
         } else {
-          jsonData = data["others"];
+          if (mode == ScreensModes.TOP10) {
+            jsonData = data["others"];
+          } else {
+            jsonData = data["idioms"] + data["others"];
+            print("ALL: " + jsonData.toString());
+          }
         }
       });
     });
