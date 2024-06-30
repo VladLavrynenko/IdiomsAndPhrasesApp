@@ -4,6 +4,8 @@ import 'package:idioms_and_phrases/ExplorePage/ExplorePage.dart';
 import 'package:idioms_and_phrases/model/ScreensModes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../LearnPage/LearnPage.dart';
+
 class CardsHome extends StatefulWidget {
   final Future<void> Function() onTap;
   final String title;
@@ -26,7 +28,7 @@ class _CardsHomeState extends State<CardsHome> {
           cardExplore(context),
 
           Padding(padding: EdgeInsets.only(left: 16.0, top: 16.0), child: Text("Learn" ),),
-          cardLearn(),
+          cardLearn(context),
 
           Padding(padding: EdgeInsets.only(left: 16.0, top: 16.0), child: Text("Quiz" ),),
           cardQuiz(),
@@ -39,6 +41,7 @@ class _CardsHomeState extends State<CardsHome> {
 }
 
 Widget cardExplore(BuildContext context) {
+
   return Card(
     color: Colors.white,
     margin: EdgeInsets.all(8),
@@ -88,7 +91,7 @@ Widget cardExplore(BuildContext context) {
   );
 }
 
-Widget cardLearn() {
+Widget cardLearn(BuildContext context) {
   return Card(
     color: Colors.white,
     margin: EdgeInsets.all(8),
@@ -97,42 +100,39 @@ Widget cardLearn() {
       children: [
         ListTile(
           leading: Icon(Icons.border_color),
-          // Uncomment and use your SoundButton here
-          // leading: SoundButton(
-          //   title: 'Sound',
-          //   onTap: () async {
-          //     _newVoiceText = i["idiom"];
-          //     _speak();
-          //   },
-          // ),
+          onTap: (){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SafeArea(child: const LearnScreen(screenMode: ScreensModes.TOP10)), //Main()
+                ));
+          },
           title: Text('Learn Top-10'),
           subtitle: Text('This is a notification'),
         ),
         Divider(),
         ListTile(
           leading: Icon(Icons.border_color),
-          // Uncomment and use your SoundButton here
-          // leading: SoundButton(
-          //   title: 'Sound',
-          //   onTap: () async {
-          //     _newVoiceText = i["idiom"];
-          //     _speak();
-          //   },
-          // ),
+          onTap: (){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SafeArea(child: const LearnScreen(screenMode: ScreensModes.OTHERS)), //Main()
+                ));
+          },
           title: Text('Learn Others'),
           subtitle: Text('This is another notification'),
         ),
         Divider(),
         ListTile(
           leading: Icon(Icons.border_color),
-          // Uncomment and use your SoundButton here
-          // leading: SoundButton(
-          //   title: 'Sound',
-          //   onTap: () async {
-          //     _newVoiceText = i["idiom"];
-          //     _speak();
-          //   },
-          // ),
+          onTap: (){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SafeArea(child: const LearnScreen(screenMode: ScreensModes.ALL)), //Main()
+                ));
+          },
           title: Text('Learn All'),
           subtitle: Text('This is yet another notification'),
         ),
