@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idioms_and_phrases/LearnPage/bloc/learn_bloc.dart';
 import 'package:idioms_and_phrases/model/ScreensModes.dart';
 import '../util/constants.dart';
 import 'package:http/http.dart' as http;
@@ -74,9 +76,11 @@ class _LearnScreenState extends State<LearnScreen> {
             jsonData = data["others"];
           } else {
             jsonData = data["idioms"] + data["others"];
-            print("ALL: " + jsonData.toString());
           }
         }
+
+
+        context.read<LearnBloc>().add(LoadedLearnIdioms(list: jsonData));
       });
     });
   }
@@ -84,148 +88,164 @@ class _LearnScreenState extends State<LearnScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors.yellowAccent,
-                      fontSize: 48,
-                    ),
-                  ),
-              ),
-            ),
-          ),
+      body: BlocBuilder<LearnBloc, LearnState>(
+        builder: (BuildContext context, LearnState state) {
 
-          Expanded(
-            flex: 5,
-            child: CarouselSlider(
-              options: CarouselOptions(
-                  height: double.infinity), // Take available height
-              items: jsonData.map((i) {
-                int index = jsonData.indexOf(i);
-                return Builder(
-                  builder: (BuildContext context) {
-                    bool isCurrentIdiomFocused =
-                        focusedIndex == index && isIdiomFocused;
-                    bool isCurrentExplanationFocused =
-                        focusedIndex == index && !isIdiomFocused;
+          if(state is LearnInitial){
+            return Center(child: const CircularProgressIndicator(color: Colors.amberAccent,));
+          }
 
-                    return Center(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.symmetric(vertical: 36),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 30.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+          if(state is LearnLoaded){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
                         ),
-
-                        child: SingleChildScrollView(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text('№' + (index+1).toString(),
-                                    style: TextStyle(fontSize: 36.0, color: Colors.black87)),
-                                TextButton(
-                                  onLongPress: () {
-                                    copyToClipBoard(context, i["idiom"]);
-                                  },
-                                  onPressed: () {
-                                    _changeFocus(index, true);
-                                  },
-                                  child: AnimatedDefaultTextStyle(
-                                    duration: const Duration(milliseconds: 200),
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: isCurrentIdiomFocused
-                                            ? 36.0
-                                            : 18.0),
-                                    child: Text(
-                                        textAlign: TextAlign.center,
-                                        '"${i["idiom"]}"'),
-                                  ),
-                                ),
-                                SoundButton(
-                                  onTap: () async {
-                                    _newVoiceText = i["idiom"];
-                                    _speak();
-                                  },
-                                ),
-                                TextButton(
-                                  onLongPress: () {
-                                    copyToClipBoard(context, i["idiom"]);
-                                  },
-                                  onPressed: () {
-                                    _changeFocus(index, false);
-                                  },
-                                  child: AnimatedDefaultTextStyle(
-                                    duration: const Duration(milliseconds: 200),
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: isCurrentExplanationFocused
-                                            ? 36.0
-                                            : 18.0),
-                                    child: Text(
-                                        textAlign: TextAlign.center,
-                                        '${i["explanation"]}'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          color: Colors.yellowAccent,
+                          fontSize: 48,
                         ),
                       ),
-                    );
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  flex: 5,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                        height: double.infinity), // Take available height
+                    items: state.list.map((i) {
+                      int index = state.list.indexOf(i);
+                      return Builder(
+                        builder: (BuildContext context) {
+                          bool isCurrentIdiomFocused =
+                              focusedIndex == index && isIdiomFocused;
+                          bool isCurrentExplanationFocused =
+                              focusedIndex == index && !isIdiomFocused;
+
+                          return Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.symmetric(vertical: 36),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 30.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+
+                              child: SingleChildScrollView(
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text('№' + (index+1).toString(),
+                                          style: TextStyle(fontSize: 36.0, color: Colors.black87)),
+                                      TextButton(
+                                        onLongPress: () {
+                                          copyToClipBoard(context, i["idiom"]);
+                                        },
+                                        onPressed: () {
+                                          _changeFocus(index, true);
+                                        },
+                                        child: AnimatedDefaultTextStyle(
+                                          duration: const Duration(milliseconds: 200),
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: isCurrentIdiomFocused
+                                                  ? 36.0
+                                                  : 18.0),
+                                          child: Text(
+                                              textAlign: TextAlign.center,
+                                              '"${i["idiom"]}"'),
+                                        ),
+                                      ),
+                                      SoundButton(
+                                        onTap: () async {
+                                          _newVoiceText = i["idiom"];
+                                          _speak();
+                                        },
+                                      ),
+                                      TextButton(
+                                        onLongPress: () {
+                                          copyToClipBoard(context, i["idiom"]);
+                                        },
+                                        onPressed: () {
+                                          _changeFocus(index, false);
+                                        },
+                                        child: AnimatedDefaultTextStyle(
+                                          duration: const Duration(milliseconds: 200),
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: isCurrentExplanationFocused
+                                                  ? 36.0
+                                                  : 18.0),
+                                          child: Text(
+                                              textAlign: TextAlign.center,
+                                              '${i["explanation"]}'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+
+                Slider(
+                  value: _currentSliderValue,
+                  max: 100,
+                  divisions: 3,
+                  label: _currentSliderValue.round().toString() + "%",
+                  onChanged: (double value) {
+
+                    context.read<LearnBloc>().add(ChangeModeLearnIdioms(list: jsonData));
+                    setState(() {
+                      _currentSliderValue = value;
+                    });
                   },
-                );
-              }).toList(),
-            ),
-          ),
+                ),
+              ],
+            );
+          } else {
+            return Text('Something went wrong!');
+          }
+        },
 
-
-          Slider(
-            value: _currentSliderValue,
-            max: 100,
-            divisions: 3,
-            label: _currentSliderValue.round().toString() + "%",
-            onChanged: (double value) {
-              setState(() {
-                _currentSliderValue = value;
-              });
-            },
-          ),
-        ],
       ),
     );
   }
@@ -267,3 +287,5 @@ void copyToClipBoard(BuildContext context, String textToCopy) async {
     }
   }
 }
+
+

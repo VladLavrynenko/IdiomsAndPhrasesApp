@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idioms_and_phrases/LearnPage/bloc/learn_bloc.dart';
 import 'package:idioms_and_phrases/OnBoardingPage/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'dart:async';
@@ -36,10 +38,13 @@ class MyApp extends StatelessWidget {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           bool firstStart = snapshot.data ?? true;
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: SafeArea(
-              child: firstStart ? OnBoardingScreen() : OnBoardingScreen(), //HomeScreen(),
+          return MultiBlocProvider(
+            providers: [BlocProvider(create: (context) => LearnBloc()..add(LoadLearnIdioms()))],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: SafeArea(
+                child: firstStart ? OnBoardingScreen() : OnBoardingScreen(), //HomeScreen(),
+              ),
             ),
           );
         }
