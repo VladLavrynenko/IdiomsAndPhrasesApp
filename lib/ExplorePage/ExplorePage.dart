@@ -56,7 +56,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
   }
 
-
   @override
   void initState() {
     var mode = widget.screenMode;
@@ -66,85 +65,153 @@ class _ExploreScreenState extends State<ExploreScreen> {
       setState(() {
         title = mode.title;
 
-        if(mode == ScreensModes.TOP10){
+        if (mode == ScreensModes.TOP10) {
           jsonData = data["idioms"];
         } else {
-          jsonData = data["others"];
+          if (mode == ScreensModes.TOP10) {
+            jsonData = data["others"];
+          } else {
+            jsonData = data["idioms"] + data["others"];
+            print("ALL: " + jsonData.toString());
+          }
         }
       });
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              decoration: BoxDecoration(
+                color: Colors.black87,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.yellowAccent,
+                      fontSize: 48,
+                    ),
+                  ),
+              ),
+            ),
+          ),
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text(
-          title,
-          style: TextStyle(color: Colors.blueAccent, backgroundColor: Colors.amber, fontSize: 48),
-        ),
-        Expanded(
-          child: CarouselSlider(
-            options: CarouselOptions(height: double.infinity), // Take available height
-            items: jsonData.map((i) {
-              int index = jsonData.indexOf(i);
-              return Builder(
-                builder: (BuildContext context) {
-                  bool isCurrentIdiomFocused = focusedIndex == index && isIdiomFocused;
-                  bool isCurrentExplanationFocused = focusedIndex == index && !isIdiomFocused;
+          Expanded(
+            flex: 5,
+            child: CarouselSlider(
+              options: CarouselOptions(
+                  height: double.infinity), // Take available height
+              items: jsonData.map((i) {
+                int index = jsonData.indexOf(i);
+                return Builder(
+                  builder: (BuildContext context) {
+                    bool isCurrentIdiomFocused =
+                        focusedIndex == index && isIdiomFocused;
+                    bool isCurrentExplanationFocused =
+                        focusedIndex == index && !isIdiomFocused;
 
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 30.0),
-                    decoration: BoxDecoration(color: Colors.amber),
-                    child: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                copyToClipBoard( context, i["idiom"]);
-                                _changeFocus(index, true);
-                              },
-                              child: AnimatedDefaultTextStyle(
-                                duration: const Duration(milliseconds: 200),
-                                style: TextStyle(fontSize: isCurrentIdiomFocused ? 36.0 : 18.0),
-                                child: Text(textAlign: TextAlign.center, '${i["idiom"]}'),
-                              ),
-                            ),
-
-
-                            SoundButton(onTap: () async {
-                              _newVoiceText = i["idiom"];
-                              _speak();
-                            },),
-
-                            TextButton(
-                              onPressed: () {
-                                copyToClipBoard( context, i["explanation"]);
-                                _changeFocus(index, false);
-                              },
-                              child: AnimatedDefaultTextStyle(
-                                duration: const Duration(milliseconds: 200),
-                                style: TextStyle(fontSize: isCurrentExplanationFocused ? 36.0 : 18.0),
-                                child: Text(textAlign: TextAlign.center, '${i["explanation"]}'),
-                              ),
+                    return Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(vertical: 36),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 30.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
+
+                        child: SingleChildScrollView(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text('№' + (index+1).toString(),
+                                    style: TextStyle(fontSize: 36.0, color: Colors.black87)),
+                                TextButton(
+                                  onLongPress: () {
+                                    copyToClipBoard(context, i["idiom"]);
+                                  },
+                                  onPressed: () {
+                                    _changeFocus(index, true);
+                                  },
+                                  child: AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 200),
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: isCurrentIdiomFocused
+                                            ? 36.0
+                                            : 18.0),
+                                    child: Text(
+                                        textAlign: TextAlign.center,
+                                        '"${i["idiom"]}"'),
+                                  ),
+                                ),
+                                SoundButton(
+                                  onTap: () async {
+                                    _newVoiceText = i["idiom"];
+                                    _speak();
+                                  },
+                                ),
+                                TextButton(
+                                  onLongPress: () {
+                                    copyToClipBoard(context, i["idiom"]);
+                                  },
+                                  onPressed: () {
+                                    _changeFocus(index, false);
+                                  },
+                                  child: AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 200),
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: isCurrentExplanationFocused
+                                            ? 36.0
+                                            : 18.0),
+                                    child: Text(
+                                        textAlign: TextAlign.center,
+                                        '${i["explanation"]}'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -169,19 +236,19 @@ Future<Map<String, dynamic>> downloadJSONFile(String downloadURL) async {
   }
 }
 
-void copyToClipBoard(BuildContext context, String textToCopy)  async {
+void copyToClipBoard(BuildContext context, String textToCopy) async {
   if (textToCopy.isNotEmpty) {
     try {
       await Clipboard.setData(ClipboardData(text: textToCopy));
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Copied to Clipboard!')),
       );
     } catch (e) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to copy to clipboard.')),
       );
     }
   }
 }
-
-
