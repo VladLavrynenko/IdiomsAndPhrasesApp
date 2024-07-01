@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:idioms_and_phrases/LearnPage/bloc/learn_bloc.dart';
 import 'package:idioms_and_phrases/model/ScreensModes.dart';
@@ -20,6 +21,8 @@ class LearnScreen extends StatefulWidget {
 }
 
 class _LearnScreenState extends State<LearnScreen> {
+  var isLoading = true;
+
   var title = 'Top-10';
   int? focusedIndex;
   bool isIdiomFocused = false;
@@ -62,37 +65,47 @@ class _LearnScreenState extends State<LearnScreen> {
 
   @override
   void initState() {
+    super.initState();
+
     var mode = widget.screenMode;
 
-    super.initState();
     downloadJSONFile(top10URL).then((data) {
+      if (mode == ScreensModes.TOP10) {
+        jsonData = data["idioms"];
+      } else if (mode == ScreensModes.OTHERS) {
+        jsonData = data["others"];
+      } else {
+        jsonData = data["idioms"] + data["others"];
+      }
+
+      print("jsonData");
+      print(jsonData);
+
+      // Dispatch the initial loading event
+      context.read<LearnBloc>().add(LoadLearnIdioms());
+
+      // Schedule the state update after the initial load completes
+      Future.delayed(Duration(seconds: 1), () {
+        context.read<LearnBloc>().add(LoadedLearnIdioms(list: jsonData));
+        isLoading = false;
+      });
+
       setState(() {
         title = mode.title;
-
-        if (mode == ScreensModes.TOP10) {
-          jsonData = data["idioms"];
-        } else {
-          if (mode == ScreensModes.TOP10) {
-            jsonData = data["others"];
-          } else {
-            jsonData = data["idioms"] + data["others"];
-          }
-        }
-
-
-        context.read<LearnBloc>().add(LoadedLearnIdioms(list: jsonData));
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: BlocBuilder<LearnBloc, LearnState>(
         builder: (BuildContext context, LearnState state) {
 
           if(state is LearnInitial){
-            return Center(child: const CircularProgressIndicator(color: Colors.amberAccent,));
+            if (isLoading) return Center(child: const CircularProgressIndicator(color: Colors.amberAccent,));
+            else return Text('Something went wrong!');
           }
 
           if(state is LearnLoaded){
@@ -117,11 +130,19 @@ class _LearnScreenState extends State<LearnScreen> {
                       ],
                     ),
                     child: Center(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          color: Colors.yellowAccent,
-                          fontSize: 48,
+                      child: TextButton(
+                        onPressed: (){
+                          print("STATE.PROPS:");
+                          print(state.list);
+                          print(state.props);
+                          print(state.runtimeType);
+                        },
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 48,
+                          ),
                         ),
                       ),
                     ),
@@ -185,7 +206,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                                   : 18.0),
                                           child: Text(
                                               textAlign: TextAlign.center,
-                                              '"${i["idiom"]}"'),
+                                              i["idiom"]),
                                         ),
                                       ),
                                       SoundButton(
@@ -233,7 +254,12 @@ class _LearnScreenState extends State<LearnScreen> {
                   label: _currentSliderValue.round().toString() + "%",
                   onChanged: (double value) {
 
-                    context.read<LearnBloc>().add(ChangeModeLearnIdioms(list: jsonData));
+                   filterVisibleIdiomsMode(
+                        selectedIdiomIndex: 0, //todo: selected index
+                        state: state,
+                        context: context
+                    );
+
                     setState(() {
                       _currentSliderValue = value;
                     });
@@ -289,3 +315,38 @@ void copyToClipBoard(BuildContext context, String textToCopy) async {
 }
 
 
+void filterVisibleIdiomsMode(
+    { required LearnLoaded state,
+      required int selectedIdiomIndex,
+      required BuildContext context
+    })
+async{
+  var list = state.list;
+  print("LISTLIST: ${list}");
+
+  if(list.isEmpty) {
+    context.read<LearnBloc>().add(ChangeModeLearnIdioms(list: list));
+    return;
+  }
+
+  var testIdiom = list[selectedIdiomIndex]["idiom"];
+  print("First: $testIdiom");
+  testIdiom = replaceEverySecondChar(testIdiom);
+  print("Replaced: $testIdiom");
+  list[0]["idiom"] = testIdiom;
+
+  print("LISTLIST: ${list[0]["idiom"]}");
+  context.read<LearnBloc>().add(ChangeModeLearnIdioms(list: list));
+}
+
+String replaceEverySecondChar(String input) {
+  StringBuffer result = StringBuffer();
+  for (int i = 0; i < input.length; i++) {
+    if (input[i] == ' ' || i % 2 == 0) {
+      result.write(input[i]);
+    } else {
+      result.write('_');
+    }
+  }
+  return result.toString();
+}

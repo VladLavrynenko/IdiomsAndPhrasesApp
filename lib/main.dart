@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               home: SafeArea(
-                child: firstStart ? OnBoardingScreen() : OnBoardingScreen(), //HomeScreen(),
+                child: firstStart ? OnBoardingScreen() : HomeScreen(),
               ),
             ),
           );
