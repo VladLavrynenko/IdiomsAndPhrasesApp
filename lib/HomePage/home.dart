@@ -30,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
           : currentPageIndex == 1
               ? AppBar(
                   systemOverlayStyle: SystemUiOverlayStyle(
-                    systemNavigationBarColor: Colors.purple, // Navigation bar
-                    statusBarColor: Colors.purple, // Status bar
+                    systemNavigationBarColor: Colors.black87, // Navigation bar
+                    statusBarColor: Colors.black87, // Status bar
                   ),
                   automaticallyImplyLeading: false,
                   title: Text('Favourites'),
@@ -40,8 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? AppBar(
                       systemOverlayStyle: SystemUiOverlayStyle(
                         systemNavigationBarColor:
-                            Colors.purple, // Navigation bar
-                        statusBarColor: Colors.purple, // Status bar
+                            Colors.black87, // Navigation bar
+                        statusBarColor: Colors.black87, // Status bar
                       ),
                       automaticallyImplyLeading: false,
                       title: Text('Menu'),
@@ -90,11 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   _newVoiceText = i["idiom"];
                 //   _speak();
                 // },),
-                title: Text('Notification 1'),
-                subtitle: Text('This is a notification'),
+                title: Text('Idiom 1'),
+                subtitle: Text('When in Rome'),
                 trailing: Icon(
                   Icons.favorite,
-                  color: Colors.red,
+                  color: Colors.pink,
                 ),
               ),
             ),
@@ -108,11 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   //   _newVoiceText = i["idiom"];
                   //   _speak();
                   // },),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
+                  title: Text('When in Rome'),
+                  subtitle: Text('Just do it'),
                   trailing: Icon(
                     Icons.favorite,
-                    color: Colors.red,
+                    color: Colors.pink,
                   ),
                 ),
               );

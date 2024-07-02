@@ -8,7 +8,7 @@ import '../model/ScreensModes.dart';
 import '../util/constants.dart';
 
 class OnBoardingScreen extends StatelessWidget {
-  final Color kDarkBlueColor = const Color(0xFF053149);
+  final Color kDarkBlueColor =  Colors.black87;
 
   const OnBoardingScreen({super.key});
 
@@ -20,7 +20,7 @@ class OnBoardingScreen extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => const OnBoardingScreen(), //Main()
+            builder: (context) => const HomeScreen(), //Main()
           ),
         );
       },
@@ -53,8 +53,8 @@ class OnBoardingScreen extends StatelessWidget {
       },
       controllerColor: kDarkBlueColor,
       totalPage: 3,
-      headerBackgroundColor: Colors.white,
-      pageBackgroundColor: Colors.white,
+      headerBackgroundColor: Colors.white10,
+      pageBackgroundColor: Colors.white10,
       background: [
         Image.network(pigImgURL, height: 400,),
         Image.asset(

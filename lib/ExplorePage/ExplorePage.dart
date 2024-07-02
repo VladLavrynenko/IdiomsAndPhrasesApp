@@ -68,7 +68,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         if (mode == ScreensModes.TOP10) {
           jsonData = data["idioms"];
         } else {
-          if (mode == ScreensModes.TOP10) {
+          if (mode == ScreensModes.OTHERS) {
             jsonData = data["others"];
           } else {
             jsonData = data["idioms"] + data["others"];
